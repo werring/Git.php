@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Git.php by kbjr</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Git.php</h1>
+        <h2>A PHP git library</h2>
+        <a href="https://github.com/kbjr/Git.php" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="gitphp" class="anchor" href="#gitphp"><span class="octicon octicon-link"></span></a>Git.php</h1>
+
+<h2>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>Description</h2>
+
+<p>A PHP git repository control library. Allows the running of any git command from a PHP class. Runs git commands using <code>proc_open</code>, not <code>exec</code> or the type, therefore it can run in PHP safe mode.</p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>A system with <a href="http://git-scm.com/">git</a> installed</p>
+
+<h2>
+<a name="basic-use" class="anchor" href="#basic-use"><span class="octicon octicon-link"></span></a>Basic Use</h2>
+
+<div class="highlight highlight-php"><pre><span class="k">require_once</span><span class="p">(</span><span class="s1">'Git.php'</span><span class="p">);</span>
+
+<span class="nv">$repo</span> <span class="o">=</span> <span class="nx">Git</span><span class="o">::</span><span class="na">open</span><span class="p">(</span><span class="s1">'/path/to/repo'</span><span class="p">);</span>  <span class="c1">// -or- Git::create('/path/to/repo')</span>
+
+<span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">add</span><span class="p">(</span><span class="s1">'.'</span><span class="p">);</span>
+<span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">commit</span><span class="p">(</span><span class="s1">'Some commit message'</span><span class="p">);</span>
+<span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">push</span><span class="p">(</span><span class="s1">'origin'</span><span class="p">,</span> <span class="s1">'master'</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="api-reference" class="anchor" href="#api-reference"><span class="octicon octicon-link"></span></a>API Reference</h2>
+
+<h3>
+<a name="git" class="anchor" href="#git"><span class="octicon octicon-link"></span></a>Git</h3>
+
+<h4>
+<a name="string--gitget_bin--void-" class="anchor" href="#string--gitget_bin--void-"><span class="octicon octicon-link"></span></a>string  Git::get_bin ( void )</h4>
+
+<p>Returns the path currently being used to run git.</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="nx">Git</span><span class="o">::</span><span class="na">get_bin</span><span class="p">();</span>  <span class="c1">// "/usr/bin/git"</span>
+</pre></div>
+
+<h4>
+<a name="void--gitset_bin--string-path-" class="anchor" href="#void--gitset_bin--string-path-"><span class="octicon octicon-link"></span></a>void  Git::set_bin ( string $path )</h4>
+
+<p>Sets the location where git can be found</p>
+
+<h4>
+<a name="void--gitwindows_mode--void-" class="anchor" href="#void--gitwindows_mode--void-"><span class="octicon octicon-link"></span></a>void  Git::windows_mode ( void )</h4>
+
+<p>Enables "windows mode", a set of changes designed to make the library work better in a Windows environment. As of the moment, those changes include:</p>
+
+<ul>
+<li>Sets the git bin location to just "git"</li>
+</ul><h4>
+<a name="gitrepo--gitcreate--string-repo_path-string-source--null-" class="anchor" href="#gitrepo--gitcreate--string-repo_path-string-source--null-"><span class="octicon octicon-link"></span></a>GitRepo  Git::create ( string $repo_path[, string $source = null ])</h4>
+
+<p>Creates a new git repositiory at the given <code>$repo_path</code> location. If a <code>$source</code> is given, the new repo will be cloned from that location.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$repo</span> <span class="o">=</span> <span class="nx">Git</span><span class="o">::</span><span class="na">create</span><span class="p">(</span><span class="s1">'/home/me/projects/create_repo_here'</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="gitrepo--gitopen--string-repo_path-" class="anchor" href="#gitrepo--gitopen--string-repo_path-"><span class="octicon octicon-link"></span></a>GitRepo  Git::open ( string $repo_path )</h4>
+
+<p>Opens an existing git repository.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$repo</span> <span class="o">=</span> <span class="nx">Git</span><span class="o">::</span><span class="na">open</span><span class="p">(</span><span class="s1">'/home/me/projects/existing_repo'</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="gitrepo--gitis_repo--mixed-repo-" class="anchor" href="#gitrepo--gitis_repo--mixed-repo-"><span class="octicon octicon-link"></span></a>GitRepo  Git::is_repo ( mixed $repo )</h4>
+
+<p>Returns <code>true</code> if <code>$repo</code> is an instance of <code>GitRepo</code>, or returns <code>false</code> otherwise.</p>
+
+<h3>
+<a name="gitrepo" class="anchor" href="#gitrepo"><span class="octicon octicon-link"></span></a>GitRepo</h3>
+
+<h4>
+<a name="gitrepo--gitrepocreate_new--string-repo_path-string-source-" class="anchor" href="#gitrepo--gitrepocreate_new--string-repo_path-string-source-"><span class="octicon octicon-link"></span></a>GitRepo  GitRepo::create_new ( string $repo_path[, string $source ])</h4>
+
+<p>Used internally by <code>Git::create</code>.</p>
+
+<h4>
+<a name="gitrepo-__construct--string-repo_path--null-bool-create_new--false-" class="anchor" href="#gitrepo-__construct--string-repo_path--null-bool-create_new--false-"><span class="octicon octicon-link"></span></a>GitRepo-&gt;__construct ([ string $repo_path = null[, bool $create_new = false ]])</h4>
+
+<p>The <code>GitRepo</code> constructor. If no arguments are given, a non-initialize <code>GitRepo</code> object will be created. As a non-initialize instance has no path, you cannot call git commands with it. The first param, <code>$repo_path</code>, defines the path of the repository to open. The second, <code>$create_new</code>, defines whether or not a new repository should be created if one was not found at the given path.</p>
+
+<div class="highlight highlight-php"><pre><span class="c1">// Open an existing repo</span>
+<span class="nv">$repo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GitRepo</span><span class="p">(</span><span class="s1">'/home/me/projects/existing_repo'</span><span class="p">);</span>
+
+<span class="c1">// Create a new repo</span>
+<span class="nv">$newRepo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">GitRepo</span><span class="p">(</span><span class="s1">'/home/me/projects/create_repo_here'</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="void--gitrepo-set_repo_path--string-repo_path-bool-create_new-" class="anchor" href="#void--gitrepo-set_repo_path--string-repo_path-bool-create_new-"><span class="octicon octicon-link"></span></a>void  GitRepo-&gt;set_repo_path ( string $repo_path[, bool $create_new ])</h4>
+
+<p>Takes the same parameters as the constructor above, except that the repo path is required here. Will set the path on a non-initialize <code>GitRepo</code> object, or change the path on an already existing one.</p>
+
+<h4>
+<a name="bool--gitrepo-test_git--void-" class="anchor" href="#bool--gitrepo-test_git--void-"><span class="octicon octicon-link"></span></a>bool  GitRepo-&gt;test_git ( void )</h4>
+
+<p>Tests if git is installed in the defined location and working properly by attempting to call to git. Returns <code>true</code> if git is installed, <code>false</code> if the call could not be made.</p>
+
+<h4>
+<a name="string--gitrepo-run_command--string-command-" class="anchor" href="#string--gitrepo-run_command--string-command-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;run_command ( string $command )</h4>
+
+<p>Runs an arbitrary command in the defined path using <code>proc_open</code>. Returns the contents of stdout in the case of a successful run, throws an Exception in the case of a non-zero status.</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">run_command</span><span class="p">(</span><span class="s1">'ls'</span><span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="string--gitrepo-run--string-command-" class="anchor" href="#string--gitrepo-run--string-command-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;run ( string $command )</h4>
+
+<p>Runs a git command in the defined path using <code>GitRepo-&gt;run_command</code>.</p>
+
+<div class="highlight highlight-php"><pre><span class="k">echo</span> <span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">run</span><span class="p">(</span><span class="s1">'status'</span><span class="p">);</span>  <span class="c1">// Runs `$ git status`</span>
+</pre></div>
+
+<h4>
+<a name="string--gitrepo-status--bool-html--false-" class="anchor" href="#string--gitrepo-status--bool-html--false-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;status ([ bool $html = false ])</h4>
+
+<p>Returns the result of calling <code>$ git status</code>. If the <code>$html</code> param is set to <code>true</code>, newlines will be replaced with <code>"&lt;br /&gt;"</code> for output in HTML.</p>
+
+<h4>
+<a name="string--gitrepo-add--mixed-files---" class="anchor" href="#string--gitrepo-add--mixed-files---"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;add ([ mixed $files = "*" ])</h4>
+
+<p>Runs <code>$ git add ${files} -v</code>. If <code>$files</code> is an array, it will be converted into a properly formatted string.</p>
+
+<h4>
+<a name="string--gitrepo-rm--mixed-files---bool-cached--false-" class="anchor" href="#string--gitrepo-rm--mixed-files---bool-cached--false-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;rm ([ mixed $files = "*"[, bool $cached = false ]])</h4>
+
+<p>Runs <code>$ git rm ${files}</code>. If <code>$files</code> is an array, it will be converted into a properly formatted string. If the <code>$cached</code> is <code>true</code>, the <code>--cached</code> flag will be added to the command.</p>
+
+<h4>
+<a name="string--gitrepo-commit--string-message---" class="anchor" href="#string--gitrepo-commit--string-message---"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;commit ([ string $message = "" ])</h4>
+
+<p>Runs <code>$ git commit -av -m "${message}"</code>.</p>
+
+<h4>
+<a name="string--gitrepo-clone_to--string-target-" class="anchor" href="#string--gitrepo-clone_to--string-target-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;clone_to ( string $target )</h4>
+
+<p>Clones the repo into a new path using <code>$ git clone --local</code>.</p>
+
+<h4>
+<a name="string--gitrepo-clone_from--string-source-" class="anchor" href="#string--gitrepo-clone_from--string-source-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;clone_from ( string $source )</h4>
+
+<p>Clones another repo into this path using <code>$ git clone --local</code>.</p>
+
+<h4>
+<a name="string--gitrepo-clone_remote--string-source-" class="anchor" href="#string--gitrepo-clone_remote--string-source-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;clone_remote ( string $source )</h4>
+
+<p>Clones a remote repo into this path using <code>$ git clone</code>.</p>
+
+<h4>
+<a name="string--gitrepo-clean--bool-dirs--false-bool-force--false-" class="anchor" href="#string--gitrepo-clean--bool-dirs--false-bool-force--false-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;clean ([ bool $dirs = false[, bool $force = false ]])</h4>
+
+<p>Runs <code>$ git clean</code>. If <code>$dirs</code> is <code>true</code>, the <code>-d</code> flag will be added. If <code>$force</code> is <code>true</code>, the <code>-f</code> flag will be added.</p>
+
+<h4>
+<a name="string--gitrepo-create_branch--string-branch-" class="anchor" href="#string--gitrepo-create_branch--string-branch-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;create_branch ( string $branch )</h4>
+
+<p>Creates a new branch using <code>$ git branch ${branch}</code>.</p>
+
+<h4>
+<a name="string--gitrepo-delete_branch--string-branch-bool-force--false-" class="anchor" href="#string--gitrepo-delete_branch--string-branch-bool-force--false-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;delete_branch ( string $branch[, bool $force = false ])</h4>
+
+<p>Deletes an existing branch using <code>$ git branch -d ${branch}</code>. If <code>$force</code> is <code>true</code>, the deletion will be forced using the <code>-D</code> flag.</p>
+
+<h4>
+<a name="array--gitrepo-list_branches--bool-keep_asterisk--false-" class="anchor" href="#array--gitrepo-list_branches--bool-keep_asterisk--false-"><span class="octicon octicon-link"></span></a>array  GitRepo-&gt;list_branches ([ bool $keep_asterisk = false ])</h4>
+
+<p>Returns an array of all existing local branches. If the <code>$keep_asterisk</code> flag is <code>true</code>, the currently checked out branch will still have the asterisk by its name, otherwise it is removed.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$branches</span> <span class="o">=</span> <span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">list_branches</span><span class="p">();</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$branches</span> <span class="k">as</span> <span class="nv">$branch</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">echo</span> <span class="nv">$branch</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>
+<a name="array--gitrepo-list_remote_branches--void-" class="anchor" href="#array--gitrepo-list_remote_branches--void-"><span class="octicon octicon-link"></span></a>array  GitRepo-&gt;list_remote_branches ( void )</h4>
+
+<p>Returns an array of all remote branches using <code>$ git branch -r</code>.</p>
+
+<h4>
+<a name="string--gitrepo-active_branch--bool-keep_asterisk--false-" class="anchor" href="#string--gitrepo-active_branch--bool-keep_asterisk--false-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;active_branch ([ bool $keep_asterisk = false ])</h4>
+
+<p>Returns the name of the currently active branch. If the <code>$keep_asterisk</code> flag is <code>true</code>, the currently checked out branch will still have the asterisk by its name, otherwise it is removed.</p>
+
+<h4>
+<a name="string--gitrepo-checkout--string-branch-" class="anchor" href="#string--gitrepo-checkout--string-branch-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;checkout ( string $branch )</h4>
+
+<p>Checkout the given branch.</p>
+
+<h4>
+<a name="string--gitrepo-merge--string-branch-" class="anchor" href="#string--gitrepo-merge--string-branch-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;merge ( string $branch )</h4>
+
+<p>Merge another branch into the current branch using <code>$ git merge ${branch} --no-ff</code>.</p>
+
+<h4>
+<a name="string--gitrepo-fetch--void-" class="anchor" href="#string--gitrepo-fetch--void-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;fetch ( void )</h4>
+
+<p>Run <code>$ git fetch</code>.</p>
+
+<h4>
+<a name="string--gitrepo-add_tag--string-tag-string-message--null-" class="anchor" href="#string--gitrepo-add_tag--string-tag-string-message--null-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;add_tag ( string $tag[, string $message = null ])</h4>
+
+<p>Adds a new tag to the current ref using <code>$ git tag -a ${tag} -m ${message}</code>. If a message is not given, the tag name will be used as the message.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">add_tag</span><span class="p">(</span><span class="s1">'v1.0'</span><span class="p">);</span>  <span class="c1">// Runs `$ git tag -a "v1.0" -m "v1.0"`</span>
+</pre></div>
+
+<h4>
+<a name="array--gitrepo-list_tags--string-pattern--null-" class="anchor" href="#array--gitrepo-list_tags--string-pattern--null-"><span class="octicon octicon-link"></span></a>array  GitRepo-&gt;list_tags ([ string $pattern = null ])</h4>
+
+<p>Returns an array of all existing tags matching the given pattern using <code>$ git tag -l ${pattern}</code>.</p>
+
+<h4>
+<a name="string--gitrepo-push--string-remote-string-branch-" class="anchor" href="#string--gitrepo-push--string-remote-string-branch-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;push ( string $remote, string $branch )</h4>
+
+<p>Pushes the given branch out to the given remote.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$repo</span><span class="o">-&gt;</span><span class="na">push</span><span class="p">(</span><span class="s1">'origin'</span><span class="p">,</span> <span class="s1">'master'</span><span class="p">);</span>  <span class="c1">// Runs `$ git push origin master`</span>
+</pre></div>
+
+<h4>
+<a name="string--gitrepo-pull--string-remote-string-branch-" class="anchor" href="#string--gitrepo-pull--string-remote-string-branch-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;pull ( string remote, string $branch )</h4>
+
+<p>Pulls the given branch from the given remote.</p>
+
+<h4>
+<a name="void--gitrepo-set_description--string-description-" class="anchor" href="#void--gitrepo-set_description--string-description-"><span class="octicon octicon-link"></span></a>void  GitRepo-&gt;set_description ( string $description )</h4>
+
+<p>Sets the project description stored in <code>"repo/.git/description"</code>.</p>
+
+<h4>
+<a name="string--gitrepo-get_description--void-" class="anchor" href="#string--gitrepo-get_description--void-"><span class="octicon octicon-link"></span></a>string  GitRepo-&gt;get_description ( void )</h4>
+
+<p>Gets the project description stored in <code>"repo/.git/description"</code>.</p>
+
+<h4>
+<a name="void--gitrepo-set_env--string-key-string-value-" class="anchor" href="#void--gitrepo-set_env--string-key-string-value-"><span class="octicon octicon-link"></span></a>void  GitRepo-&gt;set_env ( string $key, string $value )</h4>
+
+<p>Sets an environment variable for future commands.</p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/kbjr/Git.php/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/kbjr/Git.php/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/kbjr/Git.php"></a> is maintained by <a href="https://github.com/kbjr">kbjr</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
