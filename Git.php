@@ -12,8 +12,6 @@
  * @repo       http://github.com/kbjr/Git.php
  */
 
-if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) die('Bad load order');
-
 // ------------------------------------------------------------------------
 
 /**
@@ -414,6 +412,17 @@ class GitRepo {
 		return $this->run("commit ".$flags." -m ".escapeshellarg($message));
 	}
 
+	/**
+	 * Returns formatted last commit message
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function lastCommit(){
+		$status = self::$instance->run("show --'format={\"hash\": \"%H\", \"author\": \"%an\", \"message\": \"%s\"}'");
+		return json_decode(substr($status, 0, strpos($status, 'diff --git')));
+	}
+	
 	/**
 	 * Runs a `git clone` call to clone the current repository
 	 * into a different directory
