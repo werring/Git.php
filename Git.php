@@ -416,10 +416,10 @@ class GitRepo {
 	 * Returns formatted last commit message
 	 *
 	 * @access public
-	 * @return string
+	 * @return stdClass
 	 */
 	public function lastCommit(){
-		$status = $this->run("show --'format={\"hash\": \"%H\", \"author\": \"%an\", \"message\": \"%s\"}'");
+		$status = $this->run("show --'format={\"hash\": \"%H\", \"date\": \"%ai\", \"author\": \"%an\", \"message\": \"%s\"}'");
 		return json_decode(substr($status, 0, strpos($status, 'diff --git')));
 	}
 	
