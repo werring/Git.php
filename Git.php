@@ -419,7 +419,7 @@ class GitRepo {
 	 * @return string
 	 */
 	public function lastCommit(){
-		$status = self::$instance->run("show --'format={\"hash\": \"%H\", \"author\": \"%an\", \"message\": \"%s\"}'");
+		$status = $this->run("show --'format={\"hash\": \"%H\", \"author\": \"%an\", \"message\": \"%s\"}'");
 		return json_decode(substr($status, 0, strpos($status, 'diff --git')));
 	}
 	
