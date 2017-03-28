@@ -237,10 +237,10 @@ class GitRepo {
 			}
 		}
 	}
-	
+
 	/**
 	 * Get the path to the git repo directory (eg. the ".git" directory)
-	 * 
+	 *
 	 * @access public
 	 * @return string
 	 */
@@ -363,6 +363,15 @@ class GitRepo {
 		return $msg;
 	}
 
+    /**
+     * Checks for uncomitted changes
+     *
+     * @return bool
+     */
+    public function is_clean() {
+        return !$this->run("status --porcelain");
+    }
+
 	/**
 	 * Runs a `git add` call
 	 *
@@ -422,7 +431,7 @@ class GitRepo {
 		$status = $this->run("show --'format={\"hash\": \"%H\", \"date\": \"%ai\", \"author\": \"%an\", \"message\": \"%s\"}'");
 		return json_decode(substr($status, 0, strpos($status, 'diff --git')));
 	}
-	
+
 	/**
 	 * Runs a `git clone` call to clone the current repository
 	 * into a different directory
@@ -643,7 +652,7 @@ class GitRepo {
 	 * Push specific branch (or all branches) to a remote
 	 *
 	 * Accepts the name of the remote and local branch.
-         * If omitted, the command will be "git push", and therefore will take 
+         * If omitted, the command will be "git push", and therefore will take
          * on the behavior of your "push.defualt" configuration setting.
 	 *
 	 * @param string $remote
@@ -677,7 +686,7 @@ class GitRepo {
 	 * @return string
 	 */
 	public function log($format = null, $fulldiff=false, $filepath=null, $follow=false) {
-	
+
                 if ($fulldiff){
                     $diff = "--full-diff -p ";
                 }
@@ -686,7 +695,7 @@ class GitRepo {
 		    // Can't use full-diff with follow
 		    $diff = "--follow -- ";
 		}
-	
+
 		if ($format === null)
 			return $this->run('log ' . $diff . $filepath);
 		else
