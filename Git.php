@@ -381,7 +381,7 @@ class GitRepo {
 	 * @param   mixed   files to add
 	 * @return  string
 	 */
-	public function add($files = "*") {
+	public function add($files = ".") {
 		if (is_array($files)) {
 			$files = '"'.implode('" "', $files).'"';
 		}
